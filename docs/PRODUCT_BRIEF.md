@@ -78,15 +78,20 @@ Expected interaction:
 
 The agent provides the reasoning; WebMCP provides structured capabilities; the app owns the state and behavior.
 
+This is the Phase 1 learning demo. The competition narrative is in `docs/COMPETITION_PLAN.md`: the agent reads live workspace state, annotates the page, and files an issue only after human approval.
+
 ## Future directions
-Only after the core demo works, consider:
-- Real GitHub API-backed repository data
-- PR/review workflows
-- File annotations/selections as agent context
-- Human approval for sensitive actions
-- Agent-visible current selection or comparison state
-- Repository onboarding / contribution workflows
-- More novel workflows where live page state is essential
+Next (Phase 2), not a rebuild — in build order:
+- Dynamic tool surface: registered tools change with tab/selection, and the change is visible on screen
+- Live tool-call feed so agent activity is watchable in the page
+- Workspace context (`get_workspace`: open file, selection, tab)
+- Visible code annotations from the agent
+- Proposed issues as drafts the human Approves / Edits / Dismisses
+- `create_issue` only after confirmation
+
+Selection is file-level. Line-range selection is explicitly cut.
+
+Do not add real GitHub API, PR workflows, or extra GitHub-clone features before that story is demoable.
 
 ## Non-goals for the first milestone
 - GitHub visual fidelity
