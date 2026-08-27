@@ -1,0 +1,105 @@
+:root {
+  color: #17221d;
+  background: #f3f5f0;
+  font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* { box-sizing: border-box; }
+
+body { margin: 0; min-width: 320px; min-height: 100vh; }
+button, input { font: inherit; }
+button { color: inherit; }
+
+.app-shell { min-height: 100vh; }
+
+.topbar {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(20px, 5vw, 72px);
+  color: #f7faf5;
+  background: #13251d;
+  border-bottom: 1px solid #294137;
+}
+
+.brand { display: flex; align-items: center; gap: 10px; color: inherit; text-decoration: none; font-weight: 720; letter-spacing: -.02em; }
+.brand-mark { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 9px; color: #153021; background: #b8ef93; font-family: Georgia, serif; font-weight: 800; }
+
+.integration-status { display: flex; align-items: center; gap: 8px; color: #b9c8c0; font-size: 12px; font-weight: 650; }
+.status-dot { width: 7px; height: 7px; border-radius: 999px; background: #809087; }
+.integration-status--ready .status-dot { background: #8bea74; box-shadow: 0 0 0 4px #8bea7419; }
+.integration-status--failed .status-dot { background: #ff8b78; }
+
+.repo-hero { padding: 42px clamp(20px, 5vw, 72px) 0; background: #fcfdf9; border-bottom: 1px solid #d9dfd8; }
+.repo-title-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; max-width: 1440px; margin: 0 auto; }
+.breadcrumbs { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; color: #527060; font-size: clamp(22px, 3vw, 32px); letter-spacing: -.04em; }
+.breadcrumbs strong { color: #17251e; }
+.visibility-pill, .open-pill { border: 1px solid #bed1c3; border-radius: 999px; padding: 4px 8px; color: #476454; background: #f5faf4; font-size: 11px; font-weight: 700; letter-spacing: .02em; }
+.repo-title-row p { max-width: 650px; margin: 12px 0 26px; color: #627169; font-size: 15px; line-height: 1.6; }
+.branch-chip { flex: 0 0 auto; margin-top: 4px; border: 1px solid #cfd8cf; border-radius: 9px; padding: 9px 13px; color: #405449; background: #fff; font-size: 13px; font-weight: 650; box-shadow: 0 1px 1px #13251d08; }
+
+.repo-tabs { display: flex; gap: 6px; max-width: 1440px; margin: 0 auto; }
+.repo-tabs button { position: relative; display: flex; align-items: center; gap: 8px; border: 0; padding: 14px 16px 16px; color: #627169; background: transparent; cursor: pointer; font-size: 13px; font-weight: 680; }
+.repo-tabs button:hover { color: #17251e; }
+.repo-tabs button.active { color: #17251e; }
+.repo-tabs button.active::after { content: ""; position: absolute; inset: auto 10px -1px; height: 3px; border-radius: 3px 3px 0 0; background: #5ca832; }
+.tab-count, .muted-count { display: inline-grid; place-items: center; min-width: 24px; height: 20px; border-radius: 999px; padding: 0 7px; color: #52625a; background: #e7ebe5; font-size: 11px; }
+
+.content-wrap { max-width: 1440px; margin: 0 auto; padding: 28px clamp(20px, 5vw, 72px) 64px; }
+.workspace { display: grid; grid-template-columns: minmax(230px, 28%) 1fr; min-height: 600px; overflow: hidden; border: 1px solid #d3dad3; border-radius: 14px; background: #fff; box-shadow: 0 16px 40px #1c36260b; }
+.file-panel, .issue-panel { min-width: 0; border-right: 1px solid #dce2dc; background: #fafbf8; }
+.panel-heading { display: flex; align-items: center; justify-content: space-between; height: 55px; padding: 0 17px; border-bottom: 1px solid #dce2dc; color: #33483d; font-size: 12px; font-weight: 750; letter-spacing: .03em; text-transform: uppercase; }
+.file-list, .issue-list { padding: 8px; }
+.file-row, .issue-row { width: 100%; border: 0; border-radius: 8px; background: transparent; cursor: pointer; text-align: left; }
+.file-row { display: flex; align-items: center; gap: 10px; min-height: 37px; padding: 7px 10px; color: #43584d; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; }
+.file-row:hover, .issue-row:hover { background: #edf2eb; }
+.file-row--active, .file-row--active:hover, .issue-row--active, .issue-row--active:hover { color: #203c2b; background: #e4efe0; }
+.file-glyph { display: inline-grid; place-items: center; flex: 0 0 26px; height: 20px; border-radius: 5px; color: #52735f; background: #e5ebe4; font-family: ui-monospace, monospace; font-size: 8px; font-weight: 800; }
+.file-row--active .file-glyph { color: #306119; background: #cce7bf; }
+
+.code-panel { min-width: 0; overflow: auto; background: #fff; }
+.code-header { min-width: 560px; height: 78px; display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 0 22px; border-bottom: 1px solid #e2e6e1; }
+.code-header h2 { margin: 4px 0 0; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 14px; }
+.eyebrow { color: #789082; font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.file-meta { display: flex; gap: 14px; color: #829087; font-size: 11px; }
+.code-view { min-width: 640px; margin: 0; padding: 17px 0 28px; color: #2f4238; background: #fdfefb; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace; font-size: 12px; line-height: 1.75; tab-size: 2; }
+.code-line { display: grid; grid-template-columns: 58px 1fr; padding-right: 22px; }
+.code-line:hover { background: #f2f6ef; }
+.line-number { padding-right: 18px; color: #a8b2aa; text-align: right; user-select: none; }
+
+.mutation-banner { display: flex; align-items: center; width: calc(100% - clamp(40px, 10vw, 144px)); max-width: calc(1440px - clamp(40px, 10vw, 144px)); margin: 22px auto -6px; border: 1px solid #9dce89; border-radius: 12px; padding: 12px 15px; color: #274d30; background: #f0faec; cursor: pointer; text-align: left; box-shadow: 0 5px 20px #285c2610; }
+.mutation-banner > span:nth-child(2) { display: grid; gap: 2px; font-size: 12px; }
+.mutation-banner strong { font-size: 13px; }
+.mutation-check { display: grid; place-items: center; flex: 0 0 28px; height: 28px; margin-right: 11px; border-radius: 999px; color: #fff; background: #529d39; font-weight: 900; }
+.mutation-action { margin-left: auto; color: #356c31; font-size: 12px; font-weight: 750; }
+
+.issue-row { display: grid; grid-template-columns: 24px 1fr; gap: 7px; padding: 11px 10px; }
+.issue-row strong, .issue-row small { display: block; }
+.issue-row strong { color: #32463b; font-size: 12px; line-height: 1.4; }
+.issue-row small { margin-top: 5px; color: #819087; font-size: 10px; }
+.issue-icon { color: #5a9f3e; font-size: 17px; line-height: 16px; }
+.issue-detail { padding: clamp(25px, 5vw, 58px); }
+.issue-detail__heading { display: flex; align-items: center; gap: 10px; }
+.open-pill { color: #316928; border-color: #a9cc9b; background: #eef8e9; text-transform: uppercase; }
+.issue-number, .issue-date { color: #849087; font-size: 12px; }
+.issue-detail h2 { max-width: 780px; margin: 18px 0 8px; color: #1c2d24; font-size: clamp(24px, 3vw, 36px); line-height: 1.15; letter-spacing: -.035em; }
+.issue-date { margin: 0 0 35px; }
+.issue-body { max-width: 780px; border: 1px solid #dce2dc; border-radius: 12px; padding: 22px; color: #46584e; background: #fbfcf9; font-size: 14px; line-height: 1.75; white-space: pre-wrap; }
+.empty-state, .fatal-state { padding: 40px; color: #6b7b72; }
+
+@media (max-width: 760px) {
+  .topbar { padding-inline: 18px; }
+  .repo-hero { padding-inline: 18px; }
+  .repo-title-row { display: block; }
+  .branch-chip { display: inline-flex; margin-bottom: 22px; }
+  .content-wrap { padding: 18px 12px 40px; }
+  .workspace { grid-template-columns: 1fr; }
+  .file-panel, .issue-panel { max-height: 260px; overflow: auto; border-right: 0; border-bottom: 1px solid #dce2dc; }
+  .mutation-banner { width: calc(100% - 24px); margin-top: 14px; }
+  .mutation-action { display: none; }
+  .integration-status { font-size: 0; }
+  .file-meta { display: none; }
+}

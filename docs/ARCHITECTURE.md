@@ -62,6 +62,12 @@ For milestone 1:
 
 Avoid Redux/global state libraries unless needed. React context or a small external store is acceptable only if it materially simplifies sharing state between the UI and WebMCP adapter.
 
+### Implemented state boundary
+
+`RepositoryApp` is a small framework-independent observable store. React reads it with `useSyncExternalStore`, while WebMCP callbacks invoke the same methods directly. Issue creation commits a new immutable snapshot and synchronously notifies subscribers before the tool callback resolves.
+
+The experimental browser surface is isolated under `src/webmcp/`. It uses `document.modelContext.registerTool()` with abort-controlled registration and verifies browser-visible discovery with `document.modelContext.getTools()`. The ordinary React application remains usable when this API is unavailable.
+
 ## Service boundary
 WebMCP callbacks should not directly manipulate React DOM or components.
 
