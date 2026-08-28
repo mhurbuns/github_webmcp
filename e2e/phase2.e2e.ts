@@ -110,6 +110,7 @@ test("live page context gates an agent finding through human approval", async ({
   await expect(page.getByText("Approved. Tell the agent “Continue” to complete this action.")).toBeVisible();
   await expect(integrationStatus).toContainText("10 tools");
   expect(await discoveredNames(page)).toContain("create_issue");
+  await page.screenshot({ path: "test-results/phase3-approved-handoff.png", fullPage: true });
 
   expect(canonicalHumanMessages.continue).toBe("Continue.");
   const created = await executeTool(page, "create_issue", { draftId: proposed.result.continuation.proposalReference });

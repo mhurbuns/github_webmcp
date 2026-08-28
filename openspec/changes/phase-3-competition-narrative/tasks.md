@@ -22,6 +22,6 @@
 
 ## 5. Final Verification
 
-- [ ] 5.1 Run typecheck, lint, unit/component tests, production build, Playwright, and strict OpenSpec validation; verify every command passes and record the exact results.
+- [x] 5.1 Run typecheck, lint, unit/component tests, production build, Playwright, and strict OpenSpec validation; verify every command passes and record the exact results.
 - [ ] 5.2 Rehearse one native ChatGPT Site tools run with Full access/terminal fallback disabled, using only the canonical review prompt and “Continue”; record the discovered tools, activity trace, created issue, app/model version, elapsed time, and any experimental-browser limitation.
-- [ ] 5.3 Review the finished experience against the competition filter and remove any Phase 3 addition that does not make live human-agent page collaboration clearer; verify no backend, persistence, GitHub integration, or unrelated repository feature was added.
+- [x] 5.3 Review the finished experience against the competition filter and remove any Phase 3 addition that does not make live human-agent page collaboration clearer; verify no backend, persistence, GitHub integration, or unrelated repository feature was added.

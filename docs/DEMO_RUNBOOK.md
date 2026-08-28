@@ -53,3 +53,16 @@ Record the following for the rehearsal or submission notes:
 ## Development fallback
 
 When native Site tools are unavailable, use the Playwright harness or a compatible Chrome build with WebMCP testing enabled. These prove registration, discovery, mutation timing, and UI behavior, but the final competition rehearsal must also record one native ChatGPT Site tools run.
+
+## Latest automated verification
+
+Recorded on 2026-08-28:
+
+- TypeScript typecheck: passed
+- ESLint: passed
+- Vitest: 3 files, 28 tests passed
+- Production build: passed, 22 modules transformed
+- Playwright: 3 real-browser scenarios passed in 2.7 seconds
+- Strict OpenSpec validation: passed
+- Browser page console: no errors in the competition and state-revocation scenarios
+- Visual evidence: approved 10-tool handoff and created 7-tool issue states captured under ignored `test-results/`
