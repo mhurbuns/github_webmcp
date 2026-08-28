@@ -113,7 +113,7 @@ function codeDefinitions(app: RepositoryApp): WebMcpTool[] {
     },
     {
       name: "propose_issue", title: "Propose issue draft",
-      description: "Create an editable issue draft for human review from the file currently open on the Code tab. Does not create an issue. Retain result.continuation.proposalReference so an approved proposal can be completed after the human asks to continue.",
+      description: "Create an editable issue draft for human review from the file currently open on the Code tab. Does not create an issue. Retain result.continuation.proposalReference so the proposal can be completed after the human confirms approval.",
       inputSchema: { type: "object", properties: {
         title: { type: "string", description: "Concise draft title shown as untrusted text.", minLength: 1, maxLength: 120 },
         body: { type: "string", description: "Draft evidence, impact, and remediation shown as untrusted text.", minLength: 1, maxLength: 4000 },
@@ -133,7 +133,7 @@ function codeDefinitions(app: RepositoryApp): WebMcpTool[] {
             ...proposed.result,
             continuation: {
               proposalReference: proposed.result.draft.id,
-              instruction: "After the human approves this proposal, reuse proposalReference with the newly available completion capability when asked to continue.",
+              instruction: "After the human approves this proposal and confirms approval in chat, reuse proposalReference with the newly available completion capability.",
             },
           },
         };
@@ -145,7 +145,7 @@ function codeDefinitions(app: RepositoryApp): WebMcpTool[] {
 function approvalDefinition(app: RepositoryApp): WebMcpTool {
   return {
     name: "create_issue", title: "Create approved repository issue",
-    description: "Complete the current human-approved proposal. Use the proposal reference returned by propose_issue as draftId when the human asks to continue. This creates one in-memory issue from the exact approved content and updates the page.",
+    description: "Complete the current human-approved proposal. Use the proposal reference returned by propose_issue as draftId when the human confirms approval. This creates one in-memory issue from the exact approved content and updates the page.",
     inputSchema: { type: "object", properties: { draftId: { type: "string", description: "Machine-facing proposal reference previously returned by propose_issue for the current human-approved draft.", minLength: 1, maxLength: 80 } }, required: ["draftId"], additionalProperties: false },
     annotations: untrustedMutation,
     execute: async (input) => typeof input.draftId === "string" ? app.createIssueFromDraft({ draftId: input.draftId }) : invalidInput("Draft ID must be a string."),

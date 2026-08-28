@@ -97,7 +97,7 @@ The canonical competition interaction has two human turns. Before approval:
 
 After reviewing the draft and clicking Approve:
 
-> Continue.
+> Approved.
 
 Approval authorizes the exact stored draft revision but does not create an issue. The approved card explains this handoff in ordinary language. The agent retains and supplies the machine-facing proposal reference; the human never handles a WebMCP tool name, schema, or identifier.
 

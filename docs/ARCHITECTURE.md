@@ -103,7 +103,7 @@ Dynamic absence is not authorization. `RepositoryApp` revalidates live file cont
 
 ## Phase 3 approval handoff
 
-The authorization boundary is unchanged. `propose_issue` returns a machine-facing continuation reference alongside the draft, and the approval-gated tool contract tells the agent to reuse that reference after the human asks to continue. The React review card exposes only human state and the instruction “Tell the agent ‘Continue’”; it does not render tool names, schema fields, or identifiers.
+The authorization boundary is unchanged. `propose_issue` returns a machine-facing continuation reference alongside the draft, and the approval-gated tool contract tells the agent to reuse that reference after the human confirms approval. The React review card exposes only human state and the instruction “Tell the agent ‘Approved’”; it does not render tool names, schema fields, or identifiers.
 
 Clicking Approve publishes the approved revision and triggers contextual registration, but does not create an issue or attempt to wake an agent. Browser hosts are not required to resume a completed model turn when `toolchange` fires. The second natural-language turn gives the browser agent a reliable opportunity to rediscover the 10-tool surface and complete the exact approved proposal.
 

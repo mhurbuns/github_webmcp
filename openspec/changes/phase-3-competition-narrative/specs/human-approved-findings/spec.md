@@ -11,7 +11,7 @@ The UI SHALL let the human edit, approve, or dismiss the active draft. Editing a
 - **WHEN** the human approves a valid pending draft
 - **THEN** the draft status becomes approved
 - **AND** the repository issue count remains unchanged
-- **AND** the UI tells the human to ask the agent to continue without naming a tool or identifier
+- **AND** the UI tells the human to confirm approval to the agent without naming a tool or identifier
 - **AND** the context-specific `create_issue` tool becomes discoverable to the agent
 
 #### Scenario: Human edits an approved draft
@@ -25,7 +25,7 @@ The UI SHALL let the human edit, approve, or dismiss the active draft. Editing a
 - **AND** no issue is created
 
 ### Requirement: Issue creation requires matching approval
-The `create_issue` tool MUST accept an approved draft identifier and MUST reject calls when the draft is absent, pending, dismissed, already committed, or does not match that identifier. It SHALL use the approved draft's stored title and body rather than accepting replacement issue content from the agent. The proposal result and approval-gated tool contract SHALL provide sufficient machine-facing context for a compatible agent that created the proposal to complete it after an ordinary continuation request; the human MUST NOT be required to provide the identifier or name the tool.
+The `create_issue` tool MUST accept an approved draft identifier and MUST reject calls when the draft is absent, pending, dismissed, already committed, or does not match that identifier. It SHALL use the approved draft's stored title and body rather than accepting replacement issue content from the agent. The proposal result and approval-gated tool contract SHALL provide sufficient machine-facing context for a compatible agent that created the proposal to complete it after an ordinary approval confirmation; the human MUST NOT be required to provide the identifier or name the tool.
 
 #### Scenario: Agent commits an approved draft
 - **WHEN** the agent calls `create_issue` with the identifier of the current approved draft
@@ -33,8 +33,8 @@ The `create_issue` tool MUST accept an approved draft identifier and MUST reject
 - **AND** marks the draft committed before the callback resolves
 - **AND** increments the issue count, displays the creation banner, and exposes the new issue in existing issue tools
 
-#### Scenario: Human asks the agent to continue after approval
-- **WHEN** the same agent context proposed a draft, the human approves it, and the human says only “Continue”
+#### Scenario: Human confirms approval to the agent
+- **WHEN** the same agent context proposed a draft, the human approves it, and the human says only “Approved”
 - **THEN** a compatible agent can discover the approval-gated capability and supply the proposal reference it previously received
 - **AND** the human is not asked for a tool name, schema argument, or draft identifier
 

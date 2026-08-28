@@ -5,12 +5,12 @@
 
 ## 2. Implement the Approval Handoff
 
-- [x] 2.1 Update the review card's approved-state copy and accessible announcement to tell the human to ask the agent to continue, and verify the focused component tests pass without exposing tool names or identifiers in UI instructions.
+- [x] 2.1 Update the review card's approved-state copy and accessible announcement to tell the human to confirm approval to the agent, and verify the focused component tests pass without exposing tool names or identifiers in UI instructions.
 - [x] 2.2 Refine `propose_issue` results and approval-gated tool metadata inside the WebMCP adapter so the machine-facing reference and intended continuation are explicit, and verify adapter tests pass without changing the application authorization API.
 
 ## 3. Prove the Natural-Language End-to-End Flow
 
-- [x] 3.1 Update the Playwright competition scenario to model a natural review request, proposal, human approval, and the single follow-up “Continue”; verify discovery transitions 7 → 9 → 10 → 7 and the human messages contain no tool names, schemas, or identifiers.
+- [x] 3.1 Update the Playwright competition scenario to model a natural review request, proposal, human approval, and the single follow-up “Approved”; verify discovery transitions 7 → 9 → 10 → 7 and the human messages contain no tool names, schemas, or identifiers.
 - [x] 3.2 Verify the approved continuation creates exactly one issue, switches to its Issues detail before the callback resolves, and rejects a retry; confirm the activity feed and browser console remain clean.
 - [x] 3.3 Verify editing or dismissing an approved draft removes the commit capability and requires a new approval where applicable; confirm no issue is created on either path.
 
@@ -23,5 +23,5 @@
 ## 5. Final Verification
 
 - [x] 5.1 Run typecheck, lint, unit/component tests, production build, Playwright, and strict OpenSpec validation; verify every command passes and record the exact results.
-- [ ] 5.2 Rehearse one native ChatGPT Site tools run with Full access/terminal fallback disabled, using only the canonical review prompt and “Continue”; record the discovered tools, activity trace, created issue, app/model version, elapsed time, and any experimental-browser limitation.
+- [x] 5.2 Rehearse one native ChatGPT Site tools run with Full access/terminal fallback disabled, using only the canonical review prompt and “Approved”; record the discovered tools, activity trace, created issue, app/model version, elapsed time, and any experimental-browser limitation.
 - [x] 5.3 Review the finished experience against the competition filter and remove any Phase 3 addition that does not make live human-agent page collaboration clearer; verify no backend, persistence, GitHub integration, or unrelated repository feature was added.

@@ -56,7 +56,7 @@ describe("App", () => {
 
     expect(app.getSnapshot().issues).toHaveLength(issueCountBeforeApproval);
     const html = renderToStaticMarkup(<App repositoryApp={app} />);
-    expect(html).toContain("Approved. Tell the agent “Continue” to complete this action.");
+    expect(html).toContain("Approval recorded. Tell the agent “Approved” to complete this action.");
     expect(html).not.toMatch(/create_issue|draftId/i);
   });
 });

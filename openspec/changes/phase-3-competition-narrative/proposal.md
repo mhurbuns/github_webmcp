@@ -4,8 +4,8 @@ The Phase 2 workflow works in a native ChatGPT Site tools run, but the approval 
 
 ## What Changes
 
-- Make the approved-draft state explain the next human action in natural language: the human tells the agent to continue, while tool names, schemas, and draft identifiers remain machine-facing.
-- Refine tool descriptions and results so a compatible agent can retain the proposal reference, rediscover the approval-gated capability, and finish after a simple “Continue” without asking the human for internal arguments.
+- Make the approved-draft state explain the next human action in natural language: the human confirms “Approved,” while tool names, schemas, and draft identifiers remain machine-facing.
+- Refine tool descriptions and results so a compatible agent can retain the proposal reference, rediscover the approval-gated capability, and finish after a simple “Approved” without asking the human for internal arguments.
 - Preserve the existing security boundary: approval authorizes only the exact stored draft revision, and approval itself does not silently commit an issue.
 - Add an end-to-end competition acceptance path whose human messages contain no WebMCP tool names or identifiers.
 - Add a concise demo runbook, readiness checks, recovery guidance, and a reset procedure for repeatable recording and judging.

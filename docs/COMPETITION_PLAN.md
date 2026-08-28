@@ -96,7 +96,7 @@ Spend remaining time on live context, visible agent action, human confirmation, 
 
 **Second human turn, after clicking Approve:**
 
-> Continue.
+> Approved.
 
 The 90-second wow is “the page is collaborating,” not “the agent filed a ticket.”
 
@@ -105,7 +105,7 @@ The 90-second wow is “the page is collaborating,” not “the agent filed a t
 2. Give the first human turn above. The activity feed streams while the agent inspects multiple files.
 3. An inline annotation appears on the relevant line and a pending issue draft appears without changing the issue count.
 4. Review or edit the draft, then click **Approve**. The issue count stays unchanged, the card explains the next step, and the tool count becomes **10**.
-5. Say only **“Continue.”** The agent completes the approved action using its retained machine context.
+5. Say only **“Approved.”** The agent completes the approved action using its retained machine context.
 6. The creation banner fires, the page switches to the new issue, the issue count increases, and the tool count returns to **7**.
 
 The video should establish, in that order:
@@ -116,7 +116,7 @@ The video should establish, in that order:
 5. how the page commits the issue
 6. why WebMCP is necessary: the workspace state, and the tool surface itself, live on the page
 
-The human never names a tool, supplies a schema field, or handles a proposal identifier. Approval is authorization, not execution; the separate “Continue” turn makes agent action after human consent visible.
+The human never names a tool, supplies a schema field, or handles a proposal identifier. Approval is authorization, not execution; the separate “Approved” turn clearly communicates that consent was recorded and makes the subsequent agent action visible.
 
 ## Judging mindset
 Optimize for:
@@ -149,7 +149,7 @@ read_file × 4
 annotate_code
 propose_issue
 [human Approve]
-[human “Continue”]
+[human “Approved”]
 create_issue
 ```
 

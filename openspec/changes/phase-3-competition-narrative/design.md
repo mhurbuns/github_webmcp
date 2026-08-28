@@ -9,7 +9,7 @@ This change crosses UI copy, WebMCP metadata/results, tests, and the competition
 **Goals:**
 
 - Make the approval handoff obvious using ordinary language.
-- Give the agent enough machine-facing continuity to act after “Continue.”
+- Give the agent enough machine-facing continuity to act after “Approved.”
 - Preserve exact-revision authorization and duplicate protection.
 - Make one clean native Site tools demonstration repeatable in 90 seconds.
 - Ensure the recorded story demonstrates page tools rather than terminal or filesystem access.
@@ -26,7 +26,7 @@ This change crosses UI copy, WebMCP metadata/results, tests, and the competition
 
 ### Keep approval and commit as two distinct actions
 
-Approve changes the draft state and exposes the commit capability; it does not create the issue. The approved card will use concise copy such as “Approved. Tell the agent ‘Continue’ to complete this action.” This preserves a visible human checkpoint and accurately sets expectations.
+Approve changes the draft state and exposes the commit capability; it does not create the issue. The approved card will use concise copy such as “Approval recorded. Tell the agent ‘Approved’ to complete this action.” This preserves a visible human checkpoint and accurately sets expectations.
 
 Alternative considered: commit immediately on Approve. Rejected because it collapses the agent/human handoff, weakens the WebMCP demonstration, and changes approval from authorization into execution.
 
@@ -36,11 +36,11 @@ The exact draft identifier remains required by `create_issue`. `propose_issue` a
 
 Alternative considered: make `create_issue` argumentless and implicitly commit the current approved draft. Rejected because an explicit reference better protects against stale context, retries, and future expansion beyond one draft while costing the agent nothing when it retains its own prior result.
 
-### Treat “Continue” as the canonical second human turn
+### Treat “Approved” as the canonical second human turn
 
-The demonstration uses two human utterances: a natural review request and, after approval, “Continue.” Tests will assert that neither utterance contains tool names or identifiers. The browser harness will model the agent's resulting discovery and invocation, while the native ChatGPT checklist verifies actual model behavior separately.
+The demonstration uses two human utterances: a natural review request and, after approval, “Approved.” Tests will assert that neither utterance contains tool names or identifiers. The browser harness will model the agent's resulting discovery and invocation, while the native ChatGPT checklist verifies actual model behavior separately.
 
-Alternative considered: instruct the human to say “Create the approved issue.” This is still acceptable recovery language, but “Continue” is the stronger competition acceptance case because it proves conversational and tool-result continuity.
+Alternative considered: say only “Continue.” A native ChatGPT rehearsal showed that this was too ambiguous: the agent reused stale pending state instead of rediscovering the approved capability. “Approved” succeeded while remaining natural and implementation-free. “Create the approved issue” remains unnecessary recovery language.
 
 ### Make the UI explain state, not WebMCP mechanics
 
@@ -62,7 +62,7 @@ Alternative considered: add a dedicated Reset demo button. Rejected for now beca
 
 ## Risks / Trade-offs
 
-- **A compatible model may stop after the first turn or not infer “Continue.”** → Strengthen machine-facing tool descriptions/results, test the target model before recording, and document the natural recovery phrase “Continue with the approved action” without exposing internals.
+- **A compatible model may retain stale pending state after the first turn.** → Use the explicit confirmation “Approved,” strengthen machine-facing tool descriptions/results, test the target model before recording, and document the natural recovery phrase “The proposal is approved” without exposing internals.
 - **Dynamic registration may settle after the human's next message.** → Keep visible verified tool count, wait for 10 tools in the runbook, and retain serialized discovery verification.
 - **Codex Full access can bypass WebMCP through the terminal.** → Use ChatGPT Work or disable Full access; canonical instructions explicitly forbid terminal/filesystem inspection.
 - **Native Site tools availability depends on account, model, and desktop build.** → Preserve Chrome/harness checks for development and capture the known-good native environment before recording.

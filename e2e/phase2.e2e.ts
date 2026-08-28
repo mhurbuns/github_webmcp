@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 
 const canonicalHumanMessages = {
   review: "Review the repository starting from the currently open file. Identify the most serious substantiated problem, show it on the relevant line, and prepare an issue proposal. Do not complete the proposed action until I approve it.",
-  continue: "Continue.",
+  approval: "Approved.",
 } as const;
 
 test.beforeEach(async ({ page }) => {
@@ -107,12 +107,12 @@ test("live page context gates an agent finding through human approval", async ({
   await expect(page.getByRole("button", { name: /Issues 2/ })).toBeVisible();
   await expect(integrationStatus).toContainText("9 tools");
   await page.getByRole("button", { name: "Approve" }).click();
-  await expect(page.getByText("Approved. Tell the agent “Continue” to complete this action.")).toBeVisible();
+  await expect(page.getByText("Approval recorded. Tell the agent “Approved” to complete this action.")).toBeVisible();
   await expect(integrationStatus).toContainText("10 tools");
   expect(await discoveredNames(page)).toContain("create_issue");
   await page.screenshot({ path: "test-results/phase3-approved-handoff.png", fullPage: true });
 
-  expect(canonicalHumanMessages.continue).toBe("Continue.");
+  expect(canonicalHumanMessages.approval).toBe("Approved.");
   const created = await executeTool(page, "create_issue", { draftId: proposed.result.continuation.proposalReference });
   expect(created.result.issue.number).toBe(3);
   expect(created.result.issue.title).toBe("Stop emitting sensitive sign-in input");

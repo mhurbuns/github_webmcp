@@ -37,7 +37,7 @@ The browser surface is isolated under `src/webmcp/`. Reloading resets issues, wo
 
 4. Confirm the agent activity feed updates, a single-line annotation appears, and a pending draft appears without changing the issue count.
 5. Edit or approve the draft. Approval leaves the issue count unchanged, changes the tool count to 10, and tells you what to say next.
-6. Tell the agent: **Continue.** The issue appears immediately, the page switches to it, and discovery returns to 7 tools.
+6. Tell the agent: **Approved.** The issue appears immediately, the page switches to it, and discovery returns to 7 tools.
 
 See [docs/DEMO_RUNBOOK.md](docs/DEMO_RUNBOOK.md) for setup, reset, evidence capture, and recovery guidance.
 

@@ -23,7 +23,7 @@ This runbook rehearses and records the competition flow without requiring the pr
 5. Confirm the card says **Approved**, the issue count is still 2, and the page shows **10 tools**.
 6. Send the second message:
 
-   > Continue.
+   > Approved.
 
 7. Confirm the page switches to Issues, shows the creation banner and the new issue, increments the issue count to 3, and returns to **7 tools**.
 
@@ -45,8 +45,8 @@ Record the following for the rehearsal or submission notes:
 
 - If the page shows 0 tools, confirm Site tools is enabled, fully restart ChatGPT, and reload the page.
 - If the page stays at 7 after opening a file, select another file and return, then wait for discovery to settle.
-- If approval leaves the issue count at 2, that is expected. Wait for 10 tools and say **“Continue.”**
-- If the agent stops again, say **“Continue with the approved action.”** Do not provide a tool name or identifier.
+- If approval leaves the issue count at 2, that is expected. Wait for 10 tools and say **“Approved.”**
+- If the agent stops again, say **“The proposal is approved.”** Do not provide a tool name or identifier.
 - If the agent uses a terminal or filesystem, stop the run, disable Full access, reload, and start a fresh conversation.
 - If a run becomes inconsistent, reload the page and start again rather than editing hidden state.
 
@@ -66,3 +66,17 @@ Recorded on 2026-08-28:
 - Strict OpenSpec validation: passed
 - Browser page console: no errors in the competition and state-revocation scenarios
 - Visual evidence: approved 10-tool handoff and created 7-tool issue states captured under ignored `test-results/`
+
+## Native rehearsal record
+
+Recorded on 2026-08-28 in the ChatGPT desktop built-in browser:
+
+- Selected model: 5.6 Sol Medium
+- ChatGPT desktop version: not visible in the captured run
+- Access boundary: the session displayed **Ask for approval**, not **Full access**
+- Page-verified discovery: 7 stable tools → 9 with the code file open → 10 after approval → 7 after creation
+- Activity: 13 visible page calls, progressing through workspace/repository inspection, multiple file reads, issue inspection, annotation, proposal, creation, and final issue verification
+- Created issue: #3, “Stop logging plaintext passwords during sign-in”
+- Approximate agent time: 1 minute 36 seconds across the review and completion turns
+- Page outcome: creation banner visible, Issues tab active, issue #3 selected, final count 3
+- Native limitation: the ambiguous message “Continue” reused stale pending state and did not act; the explicit human confirmation “Approved” succeeded without a tool name or proposal identifier

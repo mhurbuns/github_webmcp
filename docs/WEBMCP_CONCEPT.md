@@ -136,7 +136,7 @@ Tool visibility improves relevance but does not grant permission. The applicatio
 
 ## Phase 3 human and machine language
 
-The human contract is outcome-oriented: review the current page, approve the proposed action, then say “Continue.” Tool names and proposal identifiers are not user vocabulary.
+The human contract is outcome-oriented: review the current page, approve the proposed action, then say “Approved.” Tool names and proposal identifiers are not user vocabulary.
 
 The WebMCP contract remains explicit and hard to misuse. The proposal result returns a machine-facing reference, and the approval-gated completion tool requires that same reference. This preserves stale-revision and duplicate protection while allowing the browser agent—not the human—to manage schema details.
 

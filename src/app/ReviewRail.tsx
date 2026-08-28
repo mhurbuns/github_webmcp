@@ -28,7 +28,7 @@ function DraftCard({ app, draft }: { app: RepositoryApp; draft: IssueDraft }) {
         <button className="approve-action" disabled={isDirty || draft.status !== "pending"} onClick={() => app.approveIssueDraft({ draftId: draft.id })} type="button">Approve</button>
         <button className="dismiss-action" onClick={() => app.dismissIssueDraft({ draftId: draft.id })} type="button">Dismiss</button>
       </div>
-      {draft.status === "approved" && !isDirty && <p className="approval-note" role="status" aria-live="polite">Approved. Tell the agent “Continue” to complete this action.</p>}
+      {draft.status === "approved" && !isDirty && <p className="approval-note" role="status" aria-live="polite">Approval recorded. Tell the agent “Approved” to complete this action.</p>}
     </form>
   );
 }
