@@ -113,3 +113,23 @@ Do not duplicate business logic inside the WebMCP layer.
 
 ## API freshness
 WebMCP is evolving. Before implementing or changing registration code, check current official documentation rather than relying on old examples. Isolate browser-specific API calls so changes are cheap.
+
+### Current experimental browser surface (August 2026)
+
+The current Chrome imperative documentation and draft specification place the API on `document.modelContext`:
+
+- `registerTool(tool, { signal })` registers one tool; aborting the signal removes it.
+- `getTools()` asynchronously returns the same-origin tools visible to an in-page agent. RepoScope calls this after every changed registration surface.
+- `executeTool(registeredTool, input, options)` exists for in-page/manual execution. Current Chrome documentation shows JSON-string input, while the evolving draft IDL has changed around object/string handling; manual helpers keep this version-sensitive detail outside application logic.
+- `toolchange` reports registry changes.
+- `readOnlyHint` and `untrustedContentHint` are advisory annotations, not enforcement.
+
+Older examples using `navigator.modelContext`, `provideContext()`, `clearContext()`, name-based `unregisterTool()`, or page-defined `runTool()` globals are not the current registration contract. RepoScope uses none of them.
+
+WebMCP remains experimental/origin-trial technology and is subject to change. `getTools()` is an in-page discovery API; a built-in browser agent may discover tools through an internal browser mechanism. The app therefore verifies what the page can observe, reports mismatches, and keeps normal repository navigation independent of WebMCP availability.
+
+## Phase 2 trust and approval boundary
+
+Repository contents and issue text can contain instruction-like or malicious text. Tools return that material as untrusted data; the agent must reason about it without treating it as authority. The page renders finding text with normal React escaping and records only bounded activity summaries.
+
+Tool visibility improves relevance but does not grant permission. The application—not the registration callback—requires a currently approved draft revision. `create_issue` accepts only its `draftId`, uses stored approved content, commits at most once, and synchronously updates React before the tool callback resolves.

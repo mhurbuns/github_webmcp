@@ -22,7 +22,7 @@ export interface WebMcpRegisteredTool {
   name: string;
   title?: string;
   description: string;
-  inputSchema?: Record<string, unknown>;
+  inputSchema?: Record<string, unknown> | string;
   annotations?: WebMcpAnnotations;
   origin?: string;
 }
@@ -30,6 +30,11 @@ export interface WebMcpRegisteredTool {
 export interface WebMcpModelContext {
   registerTool(tool: WebMcpTool, options?: { signal?: AbortSignal; exposedTo?: string[] }): Promise<void>;
   getTools(options?: { fromOrigins?: string[] }): Promise<WebMcpRegisteredTool[]>;
+  executeTool?(
+    tool: WebMcpRegisteredTool,
+    inputArguments?: Record<string, unknown> | string,
+    options?: { signal?: AbortSignal },
+  ): Promise<string | null>;
 }
 
 declare global {

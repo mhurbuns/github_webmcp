@@ -68,6 +68,39 @@ Avoid Redux/global state libraries unless needed. React context or a small exter
 
 The experimental browser surface is isolated under `src/webmcp/`. It uses `document.modelContext.registerTool()` with abort-controlled registration and verifies browser-visible discovery with `document.modelContext.getTools()`. The ordinary React application remains usable when this API is unavailable.
 
+### Implemented Phase 2 state
+
+`RepositoryApp` now owns one immutable observable snapshot containing:
+
+- live workspace context as a discriminated Code/Issues state
+- fixture issues and the last created issue
+- single-line annotations
+- one current issue draft with pending, approved, dismissed, or committed status
+- the newest 50 safe tool-activity summaries
+- browser-verified WebMCP status and owned tool names
+
+React has no duplicate tab, file, issue, or filter state. Human handlers and WebMCP callbacks invoke the same synchronous application commands. Successful mutations replace the snapshot and notify all subscribers before returning.
+
+## Phase 2 contextual registration
+
+```text
+7 stable tools
+├── get_repo_info, list_files, read_file, search_code
+├── list_issues, get_issue
+└── get_workspace
+
++ Code tab with open file
+├── annotate_code
+└── propose_issue
+
++ current approved revision
+└── create_issue
+```
+
+The browser adapter reconciles registrations by owned tool name with one `AbortController` per tool. Reconciliation is serialized and revision-aware so rapid workspace changes cannot publish stale verification. After each changed surface it calls `getTools()`, filters to adapter-owned names, and publishes the actual count. Registration, discovery, execution instrumentation, and browser ambient types remain under `src/webmcp/`.
+
+Dynamic absence is not authorization. `RepositoryApp` revalidates live file context and draft approval at execution time. `createIssueFromDraft({ draftId })` reads the approved stored title/body and commits the issue plus draft status in one notification, preventing content substitution and duplicate retries.
+
 ## Service boundary
 WebMCP callbacks should not directly manipulate React DOM or components.
 
@@ -112,6 +145,8 @@ At minimum test the pure application/service functions:
 - creating issues
 
 Where feasible, add a lightweight test around WebMCP tool registration/mapping using a mock browser interface.
+
+Phase 2 verification includes pure application tests, server-rendered UI escaping tests, mocked adapter lifecycle tests, and a Playwright Chrome flow with a page-local `document.modelContext` harness. The browser flow verifies `getTools()` at each transition, the canonical tool trace, visible approval, immediate issue rendering, narrow-width navigation, and a clean console. Native WebMCP still requires a separately compatible/opted-in browser because the API is experimental.
 
 ## Browser compatibility
 WebMCP is experimental/evolving. Feature-detect it and make the ordinary React application usable when the API is unavailable. Display a small developer/demo indicator if useful, but do not let unsupported WebMCP crash the app.

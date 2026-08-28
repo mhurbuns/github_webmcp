@@ -80,16 +80,22 @@ The agent provides the reasoning; WebMCP provides structured capabilities; the a
 
 This is the Phase 1 learning demo. The competition narrative is in `docs/COMPETITION_PLAN.md`: the agent reads live workspace state, annotates the page, and files an issue only after human approval.
 
-## Future directions
-Next (Phase 2), not a rebuild — in build order:
-- Dynamic tool surface: registered tools change with tab/selection, and the change is visible on screen
+## Phase 2 experience
+Phase 2 is implemented as an extension of the original page:
+- Dynamic tool surface: registered tools change with tab/file/draft state, and the verified count is visible on screen
 - Live tool-call feed so agent activity is watchable in the page
 - Workspace context (`get_workspace`: open file, selection, tab)
 - Visible code annotations from the agent
 - Proposed issues as drafts the human Approves / Edits / Dismisses
-- `create_issue` only after confirmation
+- `create_issue({ draftId })` only for the exact approved draft revision
 
 Selection is file-level. Line-range selection is explicitly cut.
+
+The canonical Phase 2 prompt is:
+
+> I’m looking at this login code — find the worst problem, show it on the page, and only file it if I approve.
+
+Repository files, annotation notes, issue drafts, and issue text are untrusted model/application input. The UI renders them as text, tool annotations declare untrusted output, and the activity feed stores bounded metadata rather than complete content.
 
 Do not add real GitHub API, PR workflows, or extra GitHub-clone features before that story is demoable.
 

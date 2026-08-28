@@ -31,7 +31,7 @@ A browser agent can inspect a repository and create a meaningful issue without D
 
 This remains the learning baseline, not the competition narrative.
 
-## Phase 2 — Make the page the product (now)
+## Phase 2 — Make the page the product (implemented)
 Agent should paint the UI, not just mutate a list.
 
 Three levers, in build order. Each is independently demoable, so a cut lever does not break the story.
@@ -127,6 +127,23 @@ Competition filter before any new feature:
 If no, deprioritize it.
 
 ## Open questions (narrowed)
-- Should `create_issue` refuse unless a matching approved draft exists?
-- What is the minimum visual polish for annotations and the draft card?
-- How should the tool-call feed render failures and rejected drafts?
+- Resolved: `create_issue` refuses unless the current exact draft revision is approved and accepts only its `draftId`.
+- Resolved: single-line severity markers, a compact findings rail, and one editable review card are sufficient; no modal or new route is needed.
+- Resolved: the bounded activity feed renders running, succeeded, and failed states with safe arguments, timing, and structured outcome summaries.
+
+## Verified Phase 2 demo
+
+The browser test starts with 7 stable tools, opens a file to discover 9, approves a proposal to discover 10, and returns to 7 after creation. Its canonical trace is:
+
+```text
+get_workspace
+get_repo_info
+list_files
+read_file × 4
+annotate_code
+propose_issue
+[human Approve]
+create_issue
+```
+
+The created issue becomes the active Issues-tab item before the `create_issue` callback resolves. Native-browser availability remains dependent on experimental Chrome support; the automated real-browser suite injects a standards-shaped page-local adapter so UI and lifecycle behavior are reproducible without pretending that Chromium support is stable.
