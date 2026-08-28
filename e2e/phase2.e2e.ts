@@ -1,5 +1,10 @@
 import { expect, test } from "@playwright/test";
 
+const canonicalHumanMessages = {
+  review: "Review the repository starting from the currently open file. Identify the most serious substantiated problem, show it on the relevant line, and prepare an issue proposal. Do not complete the proposed action until I approve it.",
+  continue: "Continue.",
+} as const;
+
 test.beforeEach(async ({ page }) => {
   await page.addInitScript(() => {
     if (location.search.includes("no-webmcp")) return;
@@ -55,6 +60,8 @@ async function executeTool(page: import("@playwright/test").Page, name: string, 
 }
 
 test("live page context gates an agent finding through human approval", async ({ page }) => {
+  expect(Object.values(canonicalHumanMessages).join(" ")).not.toMatch(/create_issue|draftId|schema|tool name/i);
+  expect(canonicalHumanMessages.review).not.toMatch(/password|credential|vulnerab/i);
   const browserErrors: string[] = [];
   page.on("console", (message) => { if (message.type() === "error") browserErrors.push(message.text()); });
   page.on("pageerror", (error) => browserErrors.push(error.message));
@@ -100,11 +107,12 @@ test("live page context gates an agent finding through human approval", async ({
   await expect(page.getByRole("button", { name: /Issues 2/ })).toBeVisible();
   await expect(integrationStatus).toContainText("9 tools");
   await page.getByRole("button", { name: "Approve" }).click();
-  await expect(page.getByText("Approved. The agent can now create this exact issue.")).toBeVisible();
+  await expect(page.getByText("Approved. Tell the agent “Continue” to complete this action.")).toBeVisible();
   await expect(integrationStatus).toContainText("10 tools");
   expect(await discoveredNames(page)).toContain("create_issue");
 
-  const created = await executeTool(page, "create_issue", { draftId: proposed.result.draft.id });
+  expect(canonicalHumanMessages.continue).toBe("Continue.");
+  const created = await executeTool(page, "create_issue", { draftId: proposed.result.continuation.proposalReference });
   expect(created.result.issue.number).toBe(3);
   expect(created.result.issue.title).toBe("Stop emitting sensitive sign-in input");
   await expect(page.getByText("Issue #3 created")).toBeVisible();
@@ -120,19 +128,35 @@ test("live page context gates an agent finding through human approval", async ({
   expect(browserErrors).toEqual([]);
 });
 
-test("dismiss keeps a proposed issue out of repository state", async ({ page }) => {
+test("editing and dismissing approved drafts revoke completion until reapproval", async ({ page }) => {
+  const browserErrors: string[] = [];
+  page.on("console", (message) => { if (message.type() === "error") browserErrors.push(message.text()); });
+  page.on("pageerror", (error) => browserErrors.push(error.message));
   await page.goto("/");
   await page.getByRole("button", { name: "src/App.tsx" }).click();
-  await executeTool(page, "propose_issue", {
+  const proposed = await executeTool(page, "propose_issue", {
     title: "Review navigation state",
     body: "Confirm this proposal can be dismissed without creating an issue.",
     sourcePath: "src/App.tsx",
   });
   await expect(page.getByRole("heading", { name: "Human review" })).toBeVisible();
+  await page.getByRole("button", { name: "Approve" }).click();
+  await expect(page.locator(".integration-status")).toContainText("10 tools");
+
+  await page.getByRole("textbox", { name: "Title" }).fill("Review saved navigation state");
+  await page.getByRole("button", { name: "Save changes" }).click();
+  await expect(page.locator(".draft-status")).toHaveText("pending");
+  await expect(page.locator(".integration-status")).toContainText("9 tools");
+  expect(await discoveredNames(page)).not.toContain("create_issue");
+
+  await page.getByRole("button", { name: "Approve" }).click();
+  await expect(page.locator(".integration-status")).toContainText("10 tools");
   await page.getByRole("button", { name: "Dismiss" }).click();
   await expect(page.getByRole("heading", { name: "Human review" })).toHaveCount(0);
   await expect(page.getByRole("button", { name: /Issues 2/ })).toBeVisible();
   expect(await discoveredNames(page)).not.toContain("create_issue");
+  expect(proposed.result.continuation.proposalReference).toBe("draft-1");
+  expect(browserErrors).toEqual([]);
 });
 
 test("normal navigation remains usable without WebMCP at narrow width", async ({ page }) => {

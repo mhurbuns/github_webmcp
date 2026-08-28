@@ -10,9 +10,9 @@
 
 ## 3. Prove the Natural-Language End-to-End Flow
 
-- [ ] 3.1 Update the Playwright competition scenario to model a natural review request, proposal, human approval, and the single follow-up “Continue”; verify discovery transitions 7 → 9 → 10 → 7 and the human messages contain no tool names, schemas, or identifiers.
-- [ ] 3.2 Verify the approved continuation creates exactly one issue, switches to its Issues detail before the callback resolves, and rejects a retry; confirm the activity feed and browser console remain clean.
-- [ ] 3.3 Verify editing or dismissing an approved draft removes the commit capability and requires a new approval where applicable; confirm no issue is created on either path.
+- [x] 3.1 Update the Playwright competition scenario to model a natural review request, proposal, human approval, and the single follow-up “Continue”; verify discovery transitions 7 → 9 → 10 → 7 and the human messages contain no tool names, schemas, or identifiers.
+- [x] 3.2 Verify the approved continuation creates exactly one issue, switches to its Issues detail before the callback resolves, and rejects a retry; confirm the activity feed and browser console remain clean.
+- [x] 3.3 Verify editing or dismissing an approved draft removes the commit capability and requires a new approval where applicable; confirm no issue is created on either path.
 
 ## 4. Package the Competition Narrative
 
