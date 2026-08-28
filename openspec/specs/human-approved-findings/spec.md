@@ -33,7 +33,7 @@ The `propose_issue` tool SHALL create or replace one active pending draft contai
 - **AND** does not retain a second simultaneously actionable draft
 
 ### Requirement: Humans control the draft lifecycle
-The UI SHALL let the human edit, approve, or dismiss the active draft. Editing an approved draft MUST return it to pending status so the changed content requires new approval.
+The UI SHALL let the human edit, approve, or dismiss the active draft. Editing an approved draft MUST return it to pending status so the changed content requires new approval. Approval MUST NOT itself create an issue. The approved state SHALL explain the next action in ordinary human language and MUST NOT require the human to know or supply WebMCP tool names, schemas, or draft identifiers.
 
 #### Scenario: Human edits a pending draft
 - **WHEN** the human changes the draft title or body
@@ -42,7 +42,9 @@ The UI SHALL let the human edit, approve, or dismiss the active draft. Editing a
 #### Scenario: Human approves a draft
 - **WHEN** the human approves a valid pending draft
 - **THEN** the draft status becomes approved
-- **AND** the context-specific `create_issue` tool becomes discoverable
+- **AND** the repository issue count remains unchanged
+- **AND** the UI tells the human to confirm approval to the agent without naming a tool or identifier
+- **AND** the context-specific `create_issue` tool becomes discoverable to the agent
 
 #### Scenario: Human edits an approved draft
 - **WHEN** the human modifies the title or body of an approved draft
@@ -55,13 +57,18 @@ The UI SHALL let the human edit, approve, or dismiss the active draft. Editing a
 - **AND** no issue is created
 
 ### Requirement: Issue creation requires matching approval
-The `create_issue` tool MUST accept an approved draft identifier and MUST reject calls when the draft is absent, pending, dismissed, already committed, or does not match that identifier. It SHALL use the approved draft's stored title and body rather than accepting replacement issue content from the agent.
+The `create_issue` tool MUST accept an approved draft identifier and MUST reject calls when the draft is absent, pending, dismissed, already committed, or does not match that identifier. It SHALL use the approved draft's stored title and body rather than accepting replacement issue content from the agent. The proposal result and approval-gated tool contract SHALL provide sufficient machine-facing context for a compatible agent that created the proposal to complete it after an ordinary approval confirmation; the human MUST NOT be required to provide the identifier or name the tool.
 
 #### Scenario: Agent commits an approved draft
 - **WHEN** the agent calls `create_issue` with the identifier of the current approved draft
 - **THEN** the application creates exactly one open issue from the approved title and body
 - **AND** marks the draft committed before the callback resolves
 - **AND** increments the issue count, displays the creation banner, and exposes the new issue in existing issue tools
+
+#### Scenario: Human confirms approval to the agent
+- **WHEN** the same agent context proposed a draft, the human approves it, and the human says only “Approved”
+- **THEN** a compatible agent can discover the approval-gated capability and supply the proposal reference it previously received
+- **AND** the human is not asked for a tool name, schema argument, or draft identifier
 
 #### Scenario: Agent attempts direct issue creation
 - **WHEN** the agent calls `create_issue` without an approved current draft identifier
