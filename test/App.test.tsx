@@ -39,4 +39,24 @@ describe("App", () => {
     expect(html).not.toContain("<img src=x");
     expect(html).not.toContain("<script>unsafe()");
   });
+
+  it("explains the approved handoff without exposing WebMCP internals", () => {
+    const app = new RepositoryApp(fixtureRepository);
+    app.openFile({ path: "src/lib/session.ts" });
+    const proposal = app.proposeIssue({
+      title: "Review diagnostic output",
+      body: "Evidence and remediation.",
+      sourcePath: "src/lib/session.ts",
+    });
+    if (!proposal.ok) throw new Error("Fixture proposal failed");
+    const issueCountBeforeApproval = app.getSnapshot().issues.length;
+
+    const approval = app.approveIssueDraft({ draftId: proposal.result.draft.id });
+    if (!approval.ok) throw new Error("Fixture approval failed");
+
+    expect(app.getSnapshot().issues).toHaveLength(issueCountBeforeApproval);
+    const html = renderToStaticMarkup(<App repositoryApp={app} />);
+    expect(html).toContain("Approved. Tell the agent “Continue” to complete this action.");
+    expect(html).not.toMatch(/create_issue|draftId/i);
+  });
 });

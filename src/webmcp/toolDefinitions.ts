@@ -113,7 +113,7 @@ function codeDefinitions(app: RepositoryApp): WebMcpTool[] {
     },
     {
       name: "propose_issue", title: "Propose issue draft",
-      description: "Create an editable issue draft for human review from the file currently open on the Code tab. Does not create an issue.",
+      description: "Create an editable issue draft for human review from the file currently open on the Code tab. Does not create an issue. Retain result.continuation.proposalReference so an approved proposal can be completed after the human asks to continue.",
       inputSchema: { type: "object", properties: {
         title: { type: "string", description: "Concise draft title shown as untrusted text.", minLength: 1, maxLength: 120 },
         body: { type: "string", description: "Draft evidence, impact, and remediation shown as untrusted text.", minLength: 1, maxLength: 4000 },
@@ -121,9 +121,23 @@ function codeDefinitions(app: RepositoryApp): WebMcpTool[] {
         annotationIds: { type: "array", description: "Related visible annotation identifiers.", items: { type: "string" }, maxItems: 20, uniqueItems: true },
       }, required: ["title", "body", "sourcePath"], additionalProperties: false },
       annotations: untrustedMutation,
-      execute: async (input) => typeof input.title === "string" && typeof input.body === "string" && typeof input.sourcePath === "string" && (input.annotationIds === undefined || (Array.isArray(input.annotationIds) && input.annotationIds.every((id) => typeof id === "string")))
-        ? app.proposeIssue({ title: input.title, body: input.body, sourcePath: input.sourcePath, annotationIds: input.annotationIds as string[] | undefined })
-        : invalidInput("Title, body, sourcePath, and optional annotationIds must use the documented types."),
+      execute: async (input) => {
+        if (typeof input.title !== "string" || typeof input.body !== "string" || typeof input.sourcePath !== "string" || (input.annotationIds !== undefined && (!Array.isArray(input.annotationIds) || !input.annotationIds.every((id) => typeof id === "string")))) {
+          return invalidInput("Title, body, sourcePath, and optional annotationIds must use the documented types.");
+        }
+        const proposed = app.proposeIssue({ title: input.title, body: input.body, sourcePath: input.sourcePath, annotationIds: input.annotationIds as string[] | undefined });
+        if (!proposed.ok) return proposed;
+        return {
+          ...proposed,
+          result: {
+            ...proposed.result,
+            continuation: {
+              proposalReference: proposed.result.draft.id,
+              instruction: "After the human approves this proposal, reuse proposalReference with the newly available completion capability when asked to continue.",
+            },
+          },
+        };
+      },
     },
   ];
 }
@@ -131,8 +145,8 @@ function codeDefinitions(app: RepositoryApp): WebMcpTool[] {
 function approvalDefinition(app: RepositoryApp): WebMcpTool {
   return {
     name: "create_issue", title: "Create approved repository issue",
-    description: "Commit the exact current issue draft after it has been approved by the human. This creates one in-memory issue and updates the page.",
-    inputSchema: { type: "object", properties: { draftId: { type: "string", description: "Identifier of the current human-approved draft.", minLength: 1, maxLength: 80 } }, required: ["draftId"], additionalProperties: false },
+    description: "Complete the current human-approved proposal. Use the proposal reference returned by propose_issue as draftId when the human asks to continue. This creates one in-memory issue from the exact approved content and updates the page.",
+    inputSchema: { type: "object", properties: { draftId: { type: "string", description: "Machine-facing proposal reference previously returned by propose_issue for the current human-approved draft.", minLength: 1, maxLength: 80 } }, required: ["draftId"], additionalProperties: false },
     annotations: untrustedMutation,
     execute: async (input) => typeof input.draftId === "string" ? app.createIssueFromDraft({ draftId: input.draftId }) : invalidInput("Draft ID must be a string."),
   };

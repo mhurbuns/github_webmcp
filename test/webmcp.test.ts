@@ -82,9 +82,38 @@ describe("WebMCP tool definitions", () => {
     expect(createDesiredToolDefinitions(app).some(({ name }) => name === "create_issue")).toBe(false);
     app.approveIssueDraft({ draftId: proposal.result.draft.id });
     const create = createDesiredToolDefinitions(app).find(({ name }) => name === "create_issue");
-    expect(create?.inputSchema).toEqual({ type: "object", properties: { draftId: { type: "string", description: "Identifier of the current human-approved draft.", minLength: 1, maxLength: 80 } }, required: ["draftId"], additionalProperties: false });
+    expect(create?.inputSchema).toMatchObject({
+      type: "object",
+      properties: { draftId: { type: "string", description: expect.stringContaining("proposal reference"), minLength: 1, maxLength: 80 } },
+      required: ["draftId"],
+      additionalProperties: false,
+    });
     app.editIssueDraft({ draftId: proposal.result.draft.id, title: "Changed", body: "Requires approval again." });
     expect(createDesiredToolDefinitions(app).some(({ name }) => name === "create_issue")).toBe(false);
+  });
+
+  it("carries the proposal reference into the approval-gated machine contract", async () => {
+    const app = new RepositoryApp(fixtureRepository);
+    app.openFile({ path: "src/lib/session.ts" });
+    const propose = createDesiredToolDefinitions(app).find(({ name }) => name === "propose_issue")!;
+    const proposed = await propose.execute({
+      title: "Review diagnostic output",
+      body: "Evidence and remediation.",
+      sourcePath: "src/lib/session.ts",
+    }, { signal: new AbortController().signal });
+    expect(proposed).toMatchObject({
+      ok: true,
+      result: {
+        draft: { id: "draft-1", status: "pending" },
+        continuation: { proposalReference: "draft-1" },
+      },
+    });
+
+    const approval = app.approveIssueDraft({ draftId: "draft-1" });
+    if (!approval.ok) throw new Error("Fixture approval failed");
+    const create = createDesiredToolDefinitions(app).find(({ name }) => name === "create_issue")!;
+    expect(create.description).toContain("proposal reference returned by propose_issue");
+    expect(create.inputSchema).toMatchObject({ required: ["draftId"], additionalProperties: false });
   });
 
   it("records running activity before resolution and safe terminal summaries", async () => {
