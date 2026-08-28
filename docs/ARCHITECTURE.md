@@ -101,6 +101,12 @@ The browser adapter reconciles registrations by owned tool name with one `AbortC
 
 Dynamic absence is not authorization. `RepositoryApp` revalidates live file context and draft approval at execution time. `createIssueFromDraft({ draftId })` reads the approved stored title/body and commits the issue plus draft status in one notification, preventing content substitution and duplicate retries.
 
+## Phase 3 approval handoff
+
+The authorization boundary is unchanged. `propose_issue` returns a machine-facing continuation reference alongside the draft, and the approval-gated tool contract tells the agent to reuse that reference after the human asks to continue. The React review card exposes only human state and the instruction “Tell the agent ‘Continue’”; it does not render tool names, schema fields, or identifiers.
+
+Clicking Approve publishes the approved revision and triggers contextual registration, but does not create an issue or attempt to wake an agent. Browser hosts are not required to resume a completed model turn when `toolchange` fires. The second natural-language turn gives the browser agent a reliable opportunity to rediscover the 10-tool surface and complete the exact approved proposal.
+
 ## Service boundary
 WebMCP callbacks should not directly manipulate React DOM or components.
 
@@ -146,7 +152,7 @@ At minimum test the pure application/service functions:
 
 Where feasible, add a lightweight test around WebMCP tool registration/mapping using a mock browser interface.
 
-Phase 2 verification includes pure application tests, server-rendered UI escaping tests, mocked adapter lifecycle tests, and a Playwright Chrome flow with a page-local `document.modelContext` harness. The browser flow verifies `getTools()` at each transition, the canonical tool trace, visible approval, immediate issue rendering, narrow-width navigation, and a clean console. Native WebMCP still requires a separately compatible/opted-in browser because the API is experimental.
+Verification includes pure application tests, server-rendered UI escaping and handoff tests, mocked adapter lifecycle tests, and a Playwright Chrome flow with a page-local `document.modelContext` harness. The browser flow verifies `getTools()` at each transition, proposal-reference continuity, the two natural human turns, visible approval, immediate issue rendering, edit/dismiss revocation, narrow-width navigation, and a clean console. Native Site tools still require a compatible account, model, and browser build because the API is experimental.
 
 ## Browser compatibility
 WebMCP is experimental/evolving. Feature-detect it and make the ordinary React application usable when the API is unavailable. Display a small developer/demo indicator if useful, but do not let unsupported WebMCP crash the app.

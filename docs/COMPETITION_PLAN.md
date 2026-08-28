@@ -90,19 +90,23 @@ File-level selection is sufficient. Do not build line-range selection fidelity �
 Spend remaining time on live context, visible agent action, human confirmation, and a reliable 90-second story.
 
 ## Phase 3 — Competition narrative
-**Demo line:**
+**First human turn:**
 
-> I’m looking at this login code — find the worst problem, show it on the page, and only file it if I approve.
+> Review the repository starting from the currently open file. Identify the most serious substantiated problem, show it on the relevant line, and prepare an issue proposal. Do not complete the proposed action until I approve it.
+
+**Second human turn, after clicking Approve:**
+
+> Continue.
 
 The 90-second wow is “the page is collaborating,” not “the agent filed a ticket.”
 
 ### 90-second demo script
-1. Human opens `src/lib/session.ts` — **the tool count changes on screen**.
-2. Human: “Review what I’m looking at.”
-3. The tool-call feed streams live in the page.
-4. An inline annotation appears on the offending line.
-5. A draft issue card appears; the human approves.
-6. The issue commits, the banner fires, the tab switches.
+1. Start from a freshly reloaded page showing **7 tools**; open `src/lib/session.ts` and show the count become **9**.
+2. Give the first human turn above. The activity feed streams while the agent inspects multiple files.
+3. An inline annotation appears on the relevant line and a pending issue draft appears without changing the issue count.
+4. Review or edit the draft, then click **Approve**. The issue count stays unchanged, the card explains the next step, and the tool count becomes **10**.
+5. Say only **“Continue.”** The agent completes the approved action using its retained machine context.
+6. The creation banner fires, the page switches to the new issue, the issue count increases, and the tool count returns to **7**.
 
 The video should establish, in that order:
 1. what the human is doing in the web app (open file / tab)
@@ -111,6 +115,8 @@ The video should establish, in that order:
 4. how the human confirms or rejects
 5. how the page commits the issue
 6. why WebMCP is necessary: the workspace state, and the tool surface itself, live on the page
+
+The human never names a tool, supplies a schema field, or handles a proposal identifier. Approval is authorization, not execution; the separate “Continue” turn makes agent action after human consent visible.
 
 ## Judging mindset
 Optimize for:
@@ -131,7 +137,7 @@ If no, deprioritize it.
 - Resolved: single-line severity markers, a compact findings rail, and one editable review card are sufficient; no modal or new route is needed.
 - Resolved: the bounded activity feed renders running, succeeded, and failed states with safe arguments, timing, and structured outcome summaries.
 
-## Verified Phase 2 demo
+## Verified competition flow
 
 The browser test starts with 7 stable tools, opens a file to discover 9, approves a proposal to discover 10, and returns to 7 after creation. Its canonical trace is:
 
@@ -143,7 +149,8 @@ read_file × 4
 annotate_code
 propose_issue
 [human Approve]
+[human “Continue”]
 create_issue
 ```
 
-The created issue becomes the active Issues-tab item before the `create_issue` callback resolves. Native-browser availability remains dependent on experimental Chrome support; the automated real-browser suite injects a standards-shaped page-local adapter so UI and lifecycle behavior are reproducible without pretending that Chromium support is stable.
+The created issue becomes the active Issues-tab item before the final callback resolves. The canonical human messages contain no tool names, schema fields, proposal identifiers, or hint about the planted finding. Native-browser availability remains dependent on experimental browser and account support; the automated real-browser suite injects a standards-shaped page-local adapter so UI and lifecycle behavior are reproducible without pretending that support is stable. The native rehearsal procedure is in `docs/DEMO_RUNBOOK.md`.

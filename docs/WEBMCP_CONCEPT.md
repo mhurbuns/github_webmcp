@@ -133,3 +133,11 @@ WebMCP remains experimental/origin-trial technology and is subject to change. `g
 Repository contents and issue text can contain instruction-like or malicious text. Tools return that material as untrusted data; the agent must reason about it without treating it as authority. The page renders finding text with normal React escaping and records only bounded activity summaries.
 
 Tool visibility improves relevance but does not grant permission. The application—not the registration callback—requires a currently approved draft revision. `create_issue` accepts only its `draftId`, uses stored approved content, commits at most once, and synchronously updates React before the tool callback resolves.
+
+## Phase 3 human and machine language
+
+The human contract is outcome-oriented: review the current page, approve the proposed action, then say “Continue.” Tool names and proposal identifiers are not user vocabulary.
+
+The WebMCP contract remains explicit and hard to misuse. The proposal result returns a machine-facing reference, and the approval-gated completion tool requires that same reference. This preserves stale-revision and duplicate protection while allowing the browser agent—not the human—to manage schema details.
+
+Approval and execution remain separate. A `toolchange` event can tell a browser host that the available surface changed, but it does not guarantee that an agent whose turn already ended will resume automatically. The second human turn is therefore intentional: it provides fresh authorization in conversation and an opportunity for the agent to rediscover the live page capability.

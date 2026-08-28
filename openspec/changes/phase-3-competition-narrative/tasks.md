@@ -16,9 +16,9 @@
 
 ## 4. Package the Competition Narrative
 
-- [ ] 4.1 Update `docs/COMPETITION_PLAN.md` with the final 90-second two-turn script and observable checkpoints, and verify neither canonical human prompt reveals the planted finding, a tool name, or a draft identifier.
-- [ ] 4.2 Add a concise native ChatGPT Site tools runbook covering Site tools enablement, reload-based reset, expected 7/9/10/7 counts, disabling terminal/filesystem fallback, approval timing, recovery language, and evidence capture; verify a new user can follow it without WebMCP implementation knowledge.
-- [ ] 4.3 Update product, architecture, WebMCP, and README documentation only where the final handoff or compatibility boundary changed; verify all documentation agrees that approval authorizes but does not commit.
+- [x] 4.1 Update `docs/COMPETITION_PLAN.md` with the final 90-second two-turn script and observable checkpoints, and verify neither canonical human prompt reveals the planted finding, a tool name, or a draft identifier.
+- [x] 4.2 Add a concise native ChatGPT Site tools runbook covering Site tools enablement, reload-based reset, expected 7/9/10/7 counts, disabling terminal/filesystem fallback, approval timing, recovery language, and evidence capture; verify a new user can follow it without WebMCP implementation knowledge.
+- [x] 4.3 Update product, architecture, WebMCP, and README documentation only where the final handoff or compatibility boundary changed; verify all documentation agrees that approval authorizes but does not commit.
 
 ## 5. Final Verification
 

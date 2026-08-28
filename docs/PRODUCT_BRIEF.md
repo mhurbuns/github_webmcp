@@ -91,9 +91,15 @@ Phase 2 is implemented as an extension of the original page:
 
 Selection is file-level. Line-range selection is explicitly cut.
 
-The canonical Phase 2 prompt is:
+The canonical competition interaction has two human turns. Before approval:
 
-> I’m looking at this login code — find the worst problem, show it on the page, and only file it if I approve.
+> Review the repository starting from the currently open file. Identify the most serious substantiated problem, show it on the relevant line, and prepare an issue proposal. Do not complete the proposed action until I approve it.
+
+After reviewing the draft and clicking Approve:
+
+> Continue.
+
+Approval authorizes the exact stored draft revision but does not create an issue. The approved card explains this handoff in ordinary language. The agent retains and supplies the machine-facing proposal reference; the human never handles a WebMCP tool name, schema, or identifier.
 
 Repository files, annotation notes, issue drafts, and issue text are untrusted model/application input. The UI renders them as text, tool annotations declare untrusted output, and the activity feed stores bounded metadata rather than complete content.
 

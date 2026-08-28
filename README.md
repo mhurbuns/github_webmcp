@@ -27,17 +27,19 @@ At the time of implementation, Chrome documents local testing through `chrome://
 
 The browser surface is isolated under `src/webmcp/`. Reloading resets issues, workspace, findings, and activity because the demo is intentionally in-memory.
 
-## Phase 2 manual demo
+## Competition demo
 
-1. Open the app in a compatible Chrome build. With no file open, the status shows 7 stable tools.
-2. Open `src/lib/session.ts`. The status changes to 9 tools because `annotate_code` and `propose_issue` are now relevant to the live page.
+1. Open the app in ChatGPT's built-in browser with Site tools enabled and terminal/filesystem fallback disabled. After a reload, the status shows 7 tools.
+2. Open `src/lib/session.ts`. The status changes to 9 tools because the live file enables relevant review capabilities.
 3. Give the browser agent this canonical prompt:
 
-   > I’m looking at this login code — find the worst problem, show it on the page, and only file it if I approve.
+   > Review the repository starting from the currently open file. Identify the most serious substantiated problem, show it on the relevant line, and prepare an issue proposal. Do not complete the proposed action until I approve it.
 
 4. Confirm the agent activity feed updates, a single-line annotation appears, and a pending draft appears without changing the issue count.
-5. Edit or approve the draft. Approval makes `create_issue` discoverable and changes the count to 10.
-6. Let the agent call `create_issue` with the approved `draftId`. The issue appears immediately, the page switches to it, and discovery returns to 7 tools.
+5. Edit or approve the draft. Approval leaves the issue count unchanged, changes the tool count to 10, and tells you what to say next.
+6. Tell the agent: **Continue.** The issue appears immediately, the page switches to it, and discovery returns to 7 tools.
+
+See [docs/DEMO_RUNBOOK.md](docs/DEMO_RUNBOOK.md) for setup, reset, evidence capture, and recovery guidance.
 
 To inspect or manually execute the experimental surface from DevTools, pass a JSON string to the currently documented Chrome `executeTool()` form:
 
@@ -48,4 +50,4 @@ const raw = await document.modelContext.executeTool(tool, JSON.stringify({}));
 JSON.parse(raw);
 ```
 
-Direct `create_issue(title, body)` calls are intentionally rejected. A pending draft must be approved in the page, and the tool accepts only `{ draftId }`.
+At the machine boundary, direct issue content is intentionally rejected. A pending draft must be approved in the page, and only its exact machine-facing proposal reference can be committed. People never need to know that reference.
