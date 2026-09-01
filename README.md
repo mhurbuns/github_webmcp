@@ -19,21 +19,26 @@ npm run test:e2e
 npm run build
 ```
 
-## Deploy to Cloudflare Pages
+## Deploy to Cloudflare Workers
 
-The recommended production setup uses Cloudflare Pages with Git integration:
+The recommended production setup uses Cloudflare Workers Builds with Git
+integration and Workers Static Assets:
 
 1. Push the repository to GitHub and sign in to the Cloudflare dashboard.
-2. Open **Workers & Pages**, choose **Create application**, then **Pages** and
-   **Import an existing Git repository**.
-3. Select `mhurbuns/github_webmcp` and use these build settings:
+2. Open **Workers & Pages**, choose **Create application**, then import the
+   `mhurbuns/github_webmcp` Git repository.
+3. Use these build settings:
    - Production branch: `main`
    - Build command: `npm run build`
-   - Build output directory: `dist`
-4. Save and deploy. Cloudflare provides an HTTPS `*.pages.dev` URL and deploys
-   subsequent pushes to `main` automatically.
+   - Deploy command: `npx wrangler deploy`
+   - Root directory: `/`
+4. Leave Cloudflare Access off for the public competition demo, then deploy.
 
-No environment variables, Pages Functions, or backend services are required.
+`wrangler.jsonc` deploys the Vite `dist` directory as static assets and enables
+single-page application fallback routing. Cloudflare provides an HTTPS
+`*.workers.dev` URL and deploys subsequent pushes to `main` automatically.
+
+No environment variables, Worker script, or backend services are required.
 After deployment, open the live URL in ChatGPT's in-app browser and repeat the
 native verification in `docs/DEMO_RUNBOOK.md` before recording the submission.
 
