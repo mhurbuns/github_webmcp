@@ -19,6 +19,24 @@ npm run test:e2e
 npm run build
 ```
 
+## Deploy to Cloudflare Pages
+
+The recommended production setup uses Cloudflare Pages with Git integration:
+
+1. Push the repository to GitHub and sign in to the Cloudflare dashboard.
+2. Open **Workers & Pages**, choose **Create application**, then **Pages** and
+   **Import an existing Git repository**.
+3. Select `mhurbuns/github_webmcp` and use these build settings:
+   - Production branch: `main`
+   - Build command: `npm run build`
+   - Build output directory: `dist`
+4. Save and deploy. Cloudflare provides an HTTPS `*.pages.dev` URL and deploys
+   subsequent pushes to `main` automatically.
+
+No environment variables, Pages Functions, or backend services are required.
+After deployment, open the live URL in ChatGPT's in-app browser and repeat the
+native verification in `docs/DEMO_RUNBOOK.md` before recording the submission.
+
 ## WebMCP browser setup
 
 The app uses the current experimental `document.modelContext.registerTool()` API, unregisters each tool with its registration `AbortSignal`, and verifies every contextual update through `document.modelContext.getTools()`. When that API is absent, the repository UI remains usable and displays an unavailable status.
@@ -51,3 +69,7 @@ JSON.parse(raw);
 ```
 
 At the machine boundary, direct issue content is intentionally rejected. A pending draft must be approved in the page, and only its exact machine-facing proposal reference can be committed. People never need to know that reference.
+
+## License
+
+Licensed under the [MIT License](LICENSE).
