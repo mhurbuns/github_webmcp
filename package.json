@@ -31,6 +31,6 @@
     "globals": "latest",
     "typescript-eslint": "latest",
     "vitest": "latest",
-    "wrangler": "^4.128.0"
+    "wrangler": "^4.131.0"
   }
 }
